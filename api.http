@@ -1,0 +1,8 @@
+### Przykładowe uzyskanie tokenu dostępu z Keycloak
+POST http://localhost:8080/realms/master/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=game-rental-services&username=user&password=user
+
+### Do zapytania trzeba dokleić token Bearer jak poniżej - przychodzi jako access_tokan z zapytania powyżej
+GET http://localhost:8000/inventory/inventory-list
