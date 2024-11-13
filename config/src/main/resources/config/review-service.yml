@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://pm825652-001.eu.clouddb.ovh.net:35829/review
+    username: review-service
+    password: zxnI1J61F887IS5

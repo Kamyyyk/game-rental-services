@@ -1,0 +1,38 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: configuration-server
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: "classpath:./config/"
+
+logging:
+  level:
+    ROOT: INFO
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [config-server] %-5level %logger{36} - %msg%n"
+  file:
+    name: /app/logs/config-server.log
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: always
+  health:
+    db:
+      enabled: true
+    diskspace:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true

@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active: logging, metrics
+  config:
+    import: configserver:http://configuration-server:8888
