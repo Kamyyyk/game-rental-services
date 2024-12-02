@@ -20,6 +20,7 @@ public class RentalOrder {
     // Konstruktor
     public RentalOrder(UUID id, UUID game, Date endDate) {
         this.id = id;
+        this.game_id = game;
         this.endDate = endDate;
     }
 
