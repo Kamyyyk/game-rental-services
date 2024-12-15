@@ -1,4 +1,4 @@
-package pl.aeh.microservices.rentalservice.app;
+package pl.aeh.microservices.rentalservice.app.RentalOrder;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,11 +10,10 @@ import java.util.UUID;
 
 @Entity
 @Getter
-public class RentalOrderEntity {
+class RentalOrderEntity {
 
     @Id
     private UUID id;
-    private UUID game_id; // ID wypożyczanej gry
     private Date endDate; // Data końca wypożyczenia
 
 }

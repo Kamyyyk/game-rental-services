@@ -1,21 +1,15 @@
-package pl.aeh.microservices.rentalservice.app;
+package pl.aeh.microservices.rentalservice.app.RentalOrder;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
-import pl.aeh.microservices.rentalservice.app.RentalOrderDto;
-import pl.aeh.microservices.rentalservice.app.RentalOrderService;
+import pl.aeh.microservices.rentalservice.app.Game.GameDto;
+import pl.aeh.microservices.rentalservice.app.Game.GameService;
 
 import java.util.Date;
 import java.util.UUID;
-
-
 
 
 @Slf4j
@@ -24,7 +18,9 @@ import java.util.UUID;
 class  RentalOrderServiceImpl implements RentalOrderService {
 
     private final RentalOrderRepository rentalOrderRepository;
-    private final RentalOrderService rentalOrderService;
+    private final GameService gameService;
+
+
 
 
     @Override
@@ -34,7 +30,7 @@ class  RentalOrderServiceImpl implements RentalOrderService {
 
     @Override
     public Page<RentalOrder> userRentalHistory(RentalOrderSearchParameters parameters,Pageable pageable) {
-        return null;
+       return null;
     }
 
 
@@ -44,7 +40,7 @@ class  RentalOrderServiceImpl implements RentalOrderService {
     }
 
     @Override
-    public void editRentalOrder(UUID orderID) {
+    public void editRentalOrder(UUID orderID, UUID game_id, Date end_date) {
 
     }
 

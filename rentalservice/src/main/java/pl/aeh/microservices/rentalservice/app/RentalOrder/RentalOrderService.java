@@ -1,4 +1,4 @@
-package pl.aeh.microservices.rentalservice.app;
+package pl.aeh.microservices.rentalservice.app.RentalOrder;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +14,7 @@ public interface RentalOrderService {
 
     void createRentalOrder(UUID orderID, UUID game_id, Date end_date);
 
-    void editRentalOrder(UUID orderID);
+    void editRentalOrder(UUID orderID, UUID game_id, Date end_date);
 
     void removeRentalOrder(UUID orderID);
 

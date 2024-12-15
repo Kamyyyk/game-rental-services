@@ -1,4 +1,4 @@
-package pl.aeh.microservices.rentalservice.app;
+package pl.aeh.microservices.rentalservice.app.RentalOrder;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
