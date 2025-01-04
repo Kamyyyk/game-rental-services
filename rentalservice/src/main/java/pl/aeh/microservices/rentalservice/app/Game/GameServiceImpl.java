@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pl.aeh.microservices.rentalservice.messaging.GameDeliveredMessage;
 
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ class GameServiceImpl implements GameService {
     @Override
     public void addGame(GameDto game) {
         log.info("Dodawanie gry {}...", game.id());
-        GameEntity entity = new GameEntity(game.id(), game.name());
+        GameEntity entity = new GameEntity(game.id(), game.name(), game.quantity());
         gameRepository.save(entity);
     }
 
@@ -52,6 +53,14 @@ class GameServiceImpl implements GameService {
         } catch (EntityNotFoundException e) {
             log.warn("Gra o id {} nie istnieje, nie można usunąć", gameId);
         }
+    }
+
+    @Override
+    public void updateGameQuantity(GameDeliveredMessage message) {
+        GameEntity gameEntity= gameRepository.findById(message.gameId())
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Gra o id %s nie istnieje", message.gameId())));
+        gameEntity.changeQuantity(message.quantity());
+        gameRepository.save(gameEntity);
     }
 
     private GameEntity getGameEntity(UUID gameId) {

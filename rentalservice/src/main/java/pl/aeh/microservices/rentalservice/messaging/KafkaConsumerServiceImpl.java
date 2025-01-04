@@ -32,4 +32,13 @@ class KafkaConsumerServiceImpl implements KafkaConsumerService {
     public void listenGameRemovedMessage(UUID message) {
         gameService.removeGame(message);
     }
+
+    @KafkaListener(topics = "game-stock-changed", groupId = "game-group")
+    @Override
+    public void listenGameStockChanged(GameDeliveredMessage message) {
+        gameService.updateGameQuantity(message);
+    }
+
+    //Dodania stocku
+    //zmiana stocku
 }

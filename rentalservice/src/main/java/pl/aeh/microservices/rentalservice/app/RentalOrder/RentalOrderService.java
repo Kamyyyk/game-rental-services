@@ -8,14 +8,11 @@ import java.util.UUID;
 
 public interface RentalOrderService {
 
-    boolean checkAvailability(UUID game_id);
 
-    Page<RentalOrder> userRentalHistory(RentalOrderSearchParameters parameters,Pageable pageable);
 
-    void createRentalOrder(UUID orderID, UUID game_id, Date end_date);
+    void createRentalOrder(UUID gameid);
+    void gameReturn(UUID gameid);
 
-    void editRentalOrder(UUID orderID, UUID game_id, Date end_date);
 
-    void removeRentalOrder(UUID orderID);
 
 }

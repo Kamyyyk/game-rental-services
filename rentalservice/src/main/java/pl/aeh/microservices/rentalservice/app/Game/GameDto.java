@@ -4,6 +4,7 @@ import java.util.UUID;
 
 public record GameDto(
         UUID id,
-        String name
+        String name,
+        Integer quantity
 ) {
 }

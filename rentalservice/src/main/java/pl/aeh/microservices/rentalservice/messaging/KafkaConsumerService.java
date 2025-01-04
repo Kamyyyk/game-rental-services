@@ -15,4 +15,7 @@ public interface KafkaConsumerService {
     @KafkaListener(topics = "game-updated", groupId = "game-group")
     void listenGameUpdatedMessage(GameDto message);
 
+    @KafkaListener(topics = "game-stock-changed", groupId = "game-group")
+    void listenGameStockChanged(GameDeliveredMessage message);
+
 }
