@@ -14,7 +14,8 @@ class GameEntity {
     private String name;
     private Integer quantity;
 
-    public GameEntity() { }
+    public GameEntity() {
+    }
 
     public GameEntity(UUID id, String name, Integer quantity) {
         this.id = id;
@@ -30,5 +31,7 @@ class GameEntity {
         this.name = name;
     }
 
-    public void changeQuantity(Integer quantity) {this.quantity = quantity;}
+    public void changeQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }
