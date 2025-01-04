@@ -26,7 +26,8 @@ public class SecurityConfig {
     @Bean
     SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http, Converter<Jwt, Mono<AbstractAuthenticationToken>> authenticationConverter) throws Exception {
         http.authorizeExchange(exchange -> exchange
-                        .pathMatchers("/**").hasRole("USER")
+                        .pathMatchers("/actuator/**").permitAll()
+                        .pathMatchers("/inventory/**").hasRole("USER")
                         .anyExchange().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter)));
 
