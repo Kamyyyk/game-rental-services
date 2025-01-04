@@ -1,5 +1,5 @@
 spring:
   datasource:
     url: jdbc:postgresql://pm825652-001.eu.clouddb.ovh.net:35829/rental
-    username: rental-service
+    username: rental_service
     password: n99x4gPjf1mosFx
