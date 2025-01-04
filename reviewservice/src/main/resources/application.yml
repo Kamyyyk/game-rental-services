@@ -1,6 +1,6 @@
 spring:
   application:
-    name: inventory-service
+    name: review-service
   profiles:
     active: logging, metrics, microservice
   config:
