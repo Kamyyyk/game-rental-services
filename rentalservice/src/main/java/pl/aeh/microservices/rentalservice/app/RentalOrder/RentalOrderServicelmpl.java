@@ -4,20 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.aeh.microservices.rentalservice.app.Game.GameDto;
-import pl.aeh.microservices.rentalservice.messaging.KafkaConsumerService;
 import pl.aeh.microservices.rentalservice.app.Game.GameService;
+import pl.aeh.microservices.rentalservice.messaging.KafkaConsumerService;
 import pl.aeh.microservices.rentalservice.messaging.KafkaProducerService;
 
-
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-class  RentalOrderServiceImpl implements RentalOrderService {
+class RentalOrderServiceImpl implements RentalOrderService {
 
     private final RentalOrderRepository rentalOrderRepository;
     private final GameService gameService;
@@ -27,12 +25,11 @@ class  RentalOrderServiceImpl implements RentalOrderService {
     @Override
     public void createRentalOrder(UUID game_id) {
         GameDto game = gameService.getGame(game_id);
-        if( game.quantity() > 0){
-            RentalOrderEntity rentalOrderEntity = new RentalOrderEntity(UUID.randomUUID(),LocalDateTime.now(), game_id, null);
+        if (game.quantity() > 0) {
+            RentalOrderEntity rentalOrderEntity = new RentalOrderEntity(UUID.randomUUID(), LocalDateTime.now(), game_id, null);
             rentalOrderRepository.save(rentalOrderEntity);
             kafkaProducerService.gameOrdered(game_id);
-        }else
-        {
+        } else {
             throw new IllegalArgumentException("Game quantity must be greater than 0");
         }
     }

@@ -5,7 +5,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import pl.aeh.microservices.rentalservice.app.Game.GameDto;
 import pl.aeh.microservices.rentalservice.app.Game.GameService;
-import pl.aeh.microservices.rentalservice.messaging.KafkaConsumerService;
 
 import java.util.UUID;
 
@@ -38,7 +37,4 @@ class KafkaConsumerServiceImpl implements KafkaConsumerService {
     public void listenGameStockChanged(GameDeliveredMessage message) {
         gameService.updateGameQuantity(message);
     }
-
-    //Dodania stocku
-    //zmiana stocku
 }

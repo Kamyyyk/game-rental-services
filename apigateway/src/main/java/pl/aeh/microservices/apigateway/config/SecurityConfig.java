@@ -24,14 +24,18 @@ import java.util.Map;
 public class SecurityConfig {
 
     @Bean
-    SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http, Converter<Jwt, Mono<AbstractAuthenticationToken>> authenticationConverter) throws Exception {
+    SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http, Converter<Jwt, Mono<AbstractAuthenticationToken>> authenticationConverter) {
         http.authorizeExchange(exchange -> exchange
-                        .pathMatchers("/**").hasRole("USER")
-                        .anyExchange().authenticated())
-                .oauth2ResourceServer((oauth2) -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter)));
+                    .pathMatchers("/actuator/").permitAll()
+                    .pathMatchers("/inventory/").hasRole("USER")
+                    .pathMatchers("/game/").hasRole("USER")
+                    .pathMatchers("/review/").hasRole("USER")
+                    .pathMatchers("/rentals/").hasRole("USER")
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter)));
 
         http.securityContextRepository(NoOpServerSecurityContextRepository.getInstance());
-        http.csrf(csrf -> csrf.disable());
+        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
 
         return http.build();
     }
