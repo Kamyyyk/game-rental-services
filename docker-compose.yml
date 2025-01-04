@@ -1,13 +1,183 @@
-version: '3.1'
-
 services:
 
-  db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: gamerental
-      POSTGRES_USER: gamerental
-      POSTGRES_PASSWORD: gamerental12345
+  ####################################################################################################
+  ### MICROSERVICES ##################################################################################
+  ####################################################################################################
+
+  ### SERVICES
+
+  game-service:
+    image: maven:3.8.3-openjdk-17
+    container_name: game-service
+    working_dir: /app
     ports:
-      - '5432:5432'
+      - "7001:8080"
+    depends_on:
+      - configuration-server
+      - kafka
+      - api-gateway
+    volumes:
+      - ./gameservice:/app
+      - ./logs:/app/logs
+    command: /bin/sh -c "mvn clean install && java -jar /app/target/gameservice-0.0.1-SNAPSHOT.jar"
+
+  inventory-service:
+    image: maven:3.8.3-openjdk-17
+    container_name: inventory-service
+    working_dir: /app
+    ports:
+      - "7002:8080"
+    depends_on:
+      - configuration-server
+      - kafka
+      - api-gateway
+    volumes:
+      - ./inventoryservice:/app
+      - ./logs:/app/logs
+    command: /bin/sh -c "mvn clean install && java -jar /app/target/inventoryservice-0.0.1-SNAPSHOT.jar"
+
+  rental-service:
+    image: maven:3.8.3-openjdk-17
+    container_name: rental-service
+    working_dir: /app
+    ports:
+      - "7003:8080"
+    depends_on:
+      - configuration-server
+      - kafka
+      - api-gateway
+    volumes:
+      - ./rentalservice:/app
+      - ./logs:/app/logs
+    command: /bin/sh -c "mvn clean install && java -jar /app/target/rentalservice-0.0.1-SNAPSHOT.jar"
+
+  review-service:
+    image: maven:3.8.3-openjdk-17
+    container_name: review-service
+    working_dir: /app
+    ports:
+      - "7004:8080"
+    depends_on:
+      - configuration-server
+      - kafka
+      - api-gateway
+    volumes:
+      - ./reviewservice:/app
+      - ./logs:/app/logs
+    command: /bin/sh -c "mvn clean install && java -jar /app/target/reviewservice-0.0.1-SNAPSHOT.jar"
+
+  ### API GATEWAY
+
+  api-gateway:
+    image: maven:3.8.3-openjdk-17
+    container_name: api-gateway
+    working_dir: /app
+    volumes:
+      - ./apigateway:/app
+      - ./logs:/app/logs
+    depends_on:
+      - eureka
+      - configuration-server
+    command: /bin/sh -c "mvn clean install -Dmaven.test.skip=true && java -jar /app/target/apigateway-0.0.1-SNAPSHOT.jar"
+    ports:
+      - "8000:8080"
+
+  ### SERVICE DISCOVERY
+
+  eureka:
+    image: maven:3.8.3-openjdk-17
+    container_name: eureka
+    depends_on:
+      - configuration-server
+    working_dir: /app
+    volumes:
+      - ./eureka:/app
+      - ./logs:/app/logs
+    command: /bin/sh -c "mvn clean install -Dmaven.test.skip=true && java -jar /app/target/eureka-0.0.1-SNAPSHOT.jar"
+    ports:
+      - "8761:8761"
+
+  ### CENTRAL CONFIGURATION
+
+  configuration-server:
+    image: maven:3.8.3-openjdk-17
+    container_name: configuration-server
+    working_dir: /app
+    volumes:
+      - ./config:/app
+      - ./logs:/app/logs
+    command: /bin/sh -c "mvn clean install -Dmaven.test.skip=true && java -jar /app/target/config-0.0.1-SNAPSHOT.jar"
+    ports:
+      - "8888:8888"
+
+  ####################################################################################################
+  ### MESSAGE BROKER #################################################################################
+  ####################################################################################################
+
+  kafka:
+    env_file:
+      - ".env"
+    image: apache/kafka:latest
+    container_name: kafka
+    ports:
+      - "7000:8080"
+
+  ####################################################################################################
+  ### AUTHORIZATION AND AUTHENTICATION ###############################################################
+  ####################################################################################################
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.6
+    container_name: keycloak
+    command: start
+    env_file:
+      - ".env"
+    ports:
+      - "8080:8080"
+
+  ####################################################################################################
+  ### MONITORING #####################################################################################
+  ####################################################################################################
+
+  grafana:
+    env_file:
+      - ".env"
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+      - loki
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./config-prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    env_file:
+      - ".env"
+    ports:
+      - "3100:3100"
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    depends_on:
+      - loki
+    volumes:
+      - ./logs:/app/logs
+      - ./config-promtail.yml:/etc/promtail/config.yml
+
+volumes:
+  grafana_data:
+  prometheus_data:
+  loki_data:

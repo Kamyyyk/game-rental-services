@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://pm825652-001.eu.clouddb.ovh.net:35829/inventory
+    username: inventoryservice
+    password: KCU7AZFP2vuj4re

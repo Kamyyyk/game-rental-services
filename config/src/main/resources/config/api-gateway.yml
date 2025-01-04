@@ -1,0 +1,35 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka/
+    registerWithEureka: false
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/master
+  cloud:
+    gateway:
+      routes:
+        - id: game-service
+          uri: lb://GAME-SERVICE
+          predicates:
+            - Path=/game/**
+
+        - id: inventory-service.yml
+          uri: lb://INVENTORY-SERVICE
+          predicates:
+            - Path=/inventory/**
+          filters:
+            - TokenRelay
+
+        - id: rental-service
+          uri: lb://RENTAL-SERVICE
+          predicates:
+            - Path=/rental/**
+
+        - id: review-service
+          uri: lb://REVIEW-SERVICE
+          predicates:
+            - Path=/review/**

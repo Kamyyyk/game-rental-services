@@ -1,0 +1,36 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'api-gateway'
+    static_configs:
+      - targets: ['api-gateway:8080']
+    metrics_path: '/actuator/prometheus'
+  - job_name: 'config'
+    static_configs:
+      - targets: ['configuration-server:8888']
+    metrics_path: '/actuator/prometheus'
+  - job_name: 'inventory-service'
+    static_configs:
+      - targets: ['inventory-service:8080']
+    metrics_path: '/actuator/prometheus'
+  - job_name: 'game-service'
+    static_configs:
+      - targets: ['game-service:8080']
+    metrics_path: '/actuator/prometheus'
+  - job_name: 'rental-service'
+    static_configs:
+      - targets: ['rental-service:8080']
+    metrics_path: '/actuator/prometheus'
+  - job_name: 'review-service'
+    static_configs:
+      - targets: ['review-service:8080']
+    metrics_path: '/actuator/prometheus'
+  - job_name: 'eureka'
+    static_configs:
+      - targets: ['eureka:8761']
+    metrics_path: '/actuator/prometheus'
+  - job_name: 'keycloak'
+    static_configs:
+      - targets: ['keycloak:8080']
+    metrics_path: '/metrics'

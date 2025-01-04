@@ -1,0 +1,8 @@
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.security: DEBUG
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [${spring.application.name}] %-5level %logger{36} - %msg%n"
+  file:
+    name: /app/logs/${spring.application.name}.log
