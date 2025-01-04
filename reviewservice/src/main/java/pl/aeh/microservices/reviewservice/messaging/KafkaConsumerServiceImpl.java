@@ -14,19 +14,16 @@ class KafkaConsumerServiceImpl implements KafkaConsumerService {
 
     private final GameService gameService;
 
-    @KafkaListener(topics = "game-created", groupId = "game-group")
     @Override
     public void listenGameCreatedMessage(GameDto message) {
         gameService.addGame(message);
     }
 
-    @KafkaListener(topics = "game-removed", groupId = "game-group")
     @Override
     public void listenGameRemovedMessage(UUID message) {
         gameService.removeGame(message);
     }
 
-    @KafkaListener(topics = "game-updated", groupId = "game-group")
     @Override
     public void listenGameUpdatedMessage(GameDto message) {
         gameService.renameGame(message);
