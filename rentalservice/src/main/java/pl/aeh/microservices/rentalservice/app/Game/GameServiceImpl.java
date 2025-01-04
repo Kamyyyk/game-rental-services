@@ -57,7 +57,7 @@ class GameServiceImpl implements GameService {
 
     @Override
     public void updateGameQuantity(GameDeliveredMessage message) {
-        GameEntity gameEntity= gameRepository.findById(message.gameId())
+        GameEntity gameEntity = gameRepository.findById(message.gameId())
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Gra o id %s nie istnieje", message.gameId())));
         gameEntity.changeQuantity(message.quantity());
         gameRepository.save(gameEntity);
