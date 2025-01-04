@@ -3,6 +3,8 @@ package pl.aeh.microservices.reviewservice.app.review;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,23 @@ class ReviewServiceImpl implements ReviewService {
                 .stream()
                 .map(ReviewEntity::toDto)
                 .toList();
+    }
+
+    @Override
+    public ReviewDto getReviewById(UUID reviewId) {
+        return reviewRepository.findById(reviewId)
+                .map(ReviewEntity::toDto)
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public Page<ReviewDto> findAllByParameters(ReviewSearchParameters parameters, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public List<ReviewDto> getReviewsById(UUID reviewId) {
+        return reviewRepository.findAllByGameId(reviewId);
     }
 
     @Override
@@ -48,9 +67,9 @@ class ReviewServiceImpl implements ReviewService {
     @Override
     public void updateReview(ReviewDto review) {
         ReviewEntity entity = reviewRepository.findById(review.id())
-                .orElseThrow(() -> new EntityNotFoundException("Nie znaleziono recenzji do gry o id: {}", review.id()));
-        entity.content = review.content();
-        entity.rating = review.rating();
+                .orElseThrow(() -> new EntityNotFoundException("Nie znaleziono recenzji do gry o id: " + review.id()));
+        entity.setContent(review.content());
+        entity.setRating(review.rating());
         reviewRepository.save(entity);
         log.info("Recenzja o id {} została zmodyfikowana.", review.id());
     }
@@ -58,6 +77,6 @@ class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteReview(UUID reviewId) {
         reviewRepository.deleteById(reviewId);
-        log.info("Recenzja o id {} została usunięta.", review.id());
+        log.info("Recenzja o id {} została usunięta.", reviewId);
     }
 }

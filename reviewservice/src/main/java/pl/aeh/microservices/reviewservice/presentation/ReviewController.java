@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import pl.aeh.microservices.reviewservice.app.stock.GameStockDto;
-import pl.aeh.microservices.reviewservice.app.stock.GameStockSearchParameters;
-import pl.aeh.microservices.reviewservice.app.stock.GameStockService;
+import pl.aeh.microservices.reviewservice.app.review.ReviewDto;
+import pl.aeh.microservices.reviewservice.app.review.ReviewSearchParameters;
+import pl.aeh.microservices.reviewservice.app.review.ReviewService;
 
 import java.util.UUID;
 
@@ -24,7 +24,7 @@ class ReviewController {
 
     @GetMapping("/review-one")
     ReviewDto getReview(UUID reviewId) {
-        return reviewService.getReviewsById(Id);
+        return reviewService.getReviewById(reviewId);
     }
 
     @PostMapping("/create-review")
@@ -38,7 +38,7 @@ class ReviewController {
     }
 
     @DeleteMapping("/delete-review")
-    void rdeleteReview(@RequestParam UUID reviewId) {
+    void deleteReview(@RequestParam UUID reviewId) {
         reviewService.deleteReview(reviewId);
     }
 }
