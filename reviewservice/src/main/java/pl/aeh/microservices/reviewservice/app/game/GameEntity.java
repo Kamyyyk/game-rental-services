@@ -13,7 +13,8 @@ class GameEntity {
     private UUID id;
     private String name;
 
-    public GameEntity() { }
+    public GameEntity() {
+    }
 
     public GameEntity(UUID id, String name) {
         this.id = id;

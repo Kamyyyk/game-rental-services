@@ -3,11 +3,13 @@ package pl.aeh.microservices.reviewservice.app.review;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
 @Entity
 @Getter
+@Setter
 class ReviewEntity {
     @Id
     private UUID id;
@@ -16,7 +18,8 @@ class ReviewEntity {
     private String content;
     private int rating;
 
-    public ReviewEntity() { }
+    public ReviewEntity() {
+    }
 
     public ReviewEntity(UUID id, UUID gameId, String gameName, String content, int rating) {
         this.id = id;
