@@ -100,4 +100,19 @@ public class GameEntity {
     public void changeTotalReviews(int totalReviews) {
         this.totalReviews = totalReviews;
     }
+
+    public GameDto toDto() {
+        return new GameDto(
+                this.getId(),
+                this.getTitle(),
+                this.getDescription(),
+                this.getPlayers_from(),
+                this.getPlayers_to(),
+                this.getAge_from(),
+                this.getAge_to(),
+                this.isAvailable(),
+                this.getAverageRate(),
+                this.getTotalReviews()
+        );
+    }
 }
