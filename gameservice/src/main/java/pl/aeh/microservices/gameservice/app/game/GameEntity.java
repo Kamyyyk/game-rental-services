@@ -2,11 +2,13 @@ package pl.aeh.microservices.gameservice.app.game;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import pl.aeh.microservices.gameservice.GameGenre.GameGenreEntity;
 import pl.aeh.microservices.gameservice.GameType.GameTypeEntity;
 
 import java.util.UUID;
 
+@Slf4j
 @Entity
 @Getter
 @Table(name = "game")
@@ -44,6 +46,7 @@ public class GameEntity {
     public GameEntity(GameDto game) {
         if (game.id() == null) {
             this.id = UUID.randomUUID();
+            log.info("Created GameEntity with id: {}", this.id);
         }
         this.title = game.title();
         this.description = game.description();
@@ -99,5 +102,20 @@ public class GameEntity {
 
     public void changeTotalReviews(int totalReviews) {
         this.totalReviews = totalReviews;
+    }
+
+    public GameDto toDto() {
+        return new GameDto(
+                this.getId(),
+                this.getTitle(),
+                this.getDescription(),
+                this.getPlayers_from(),
+                this.getPlayers_to(),
+                this.getAge_from(),
+                this.getAge_to(),
+                this.isAvailable(),
+                this.getAverageRate(),
+                this.getTotalReviews()
+        );
     }
 }
