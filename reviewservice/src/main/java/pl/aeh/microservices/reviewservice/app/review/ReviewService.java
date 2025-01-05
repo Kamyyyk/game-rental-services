@@ -2,6 +2,7 @@ package pl.aeh.microservices.reviewservice.app.review;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import pl.aeh.microservices.reviewservice.messaging.GameCreatedMessage;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,5 +25,7 @@ public interface ReviewService {
 
     ReviewDto getReviewById(UUID reviewId);
 
-    Page<ReviewDto> findAllByParameters(ReviewSearchParameters parameters, Pageable pageable);
+    List<ReviewDto> findAll();
+
+    void addGame(GameCreatedMessage gameCreatedMessage);
 }

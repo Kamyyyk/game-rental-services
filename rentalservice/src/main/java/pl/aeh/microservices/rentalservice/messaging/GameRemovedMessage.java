@@ -1,6 +1,4 @@
-package pl.aeh.microservices.gameservice.messaging;
-
-import pl.aeh.microservices.gameservice.app.game.GameDto;
+package pl.aeh.microservices.rentalservice.messaging;
 
 import java.util.UUID;
 

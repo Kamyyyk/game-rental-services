@@ -1,4 +1,4 @@
-package pl.aeh.microservices.gameservice.messaging;
+package pl.aeh.microservices.rentalservice.messaging;
 
 import java.util.UUID;
 

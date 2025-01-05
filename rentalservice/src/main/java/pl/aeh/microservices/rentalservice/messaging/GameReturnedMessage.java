@@ -1,4 +1,9 @@
 package pl.aeh.microservices.rentalservice.messaging;
 
-public class GameReturnedMessage {
+import java.util.UUID;
+
+public record GameReturnedMessage(
+        UUID id,
+        UUID gameId
+) {
 }

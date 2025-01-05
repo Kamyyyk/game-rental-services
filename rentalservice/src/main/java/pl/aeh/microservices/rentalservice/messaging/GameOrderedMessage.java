@@ -1,4 +1,8 @@
 package pl.aeh.microservices.rentalservice.messaging;
 
-public class GameOrdered {
+import java.util.UUID;
+
+public record GameOrderedMessage(
+        UUID id,
+        UUID gameId) {
 }

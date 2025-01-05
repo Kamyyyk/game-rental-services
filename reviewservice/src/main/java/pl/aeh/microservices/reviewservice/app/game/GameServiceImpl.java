@@ -51,10 +51,4 @@ class GameServiceImpl implements GameService {
         return gameRepository.findById(gameId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Gra o id %s nie istnieje", gameId)));
     }
-
-    public void RenameGame(GameDto game) {
-        GameEntity entity = getGameEntity(game.id());
-        entity.changeName(game.name());
-        gameRepository.save(entity);
-    }
 }
