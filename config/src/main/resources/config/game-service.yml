@@ -1,5 +1,5 @@
 spring:
   datasource:
     url: jdbc:postgresql://pm825652-001.eu.clouddb.ovh.net:35829/game
-    username: game-service
+    username: game_service
     password: RY2kds7iHznCqM3

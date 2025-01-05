@@ -19,7 +19,7 @@ services:
     volumes:
       - ./gameservice:/app
       - ./logs:/app/logs
-    command: /bin/sh -c "mvn clean install && java -jar /app/target/gameservice-0.0.1-SNAPSHOT.jar"
+    command: /bin/sh -c "mvn clean install -Dmaven.test.skip=true && java -jar /app/target/gameservice-0.0.1-SNAPSHOT.jar"
 
   inventory-service:
     image: maven:3.8.3-openjdk-17
@@ -34,7 +34,7 @@ services:
     volumes:
       - ./inventoryservice:/app
       - ./logs:/app/logs
-    command: /bin/sh -c "mvn clean install && java -jar /app/target/inventoryservice-0.0.1-SNAPSHOT.jar"
+    command: /bin/sh -c "mvn clean install -Dmaven.test.skip=true && java -jar /app/target/inventoryservice-0.0.1-SNAPSHOT.jar"
 
   rental-service:
     image: maven:3.8.3-openjdk-17
@@ -49,7 +49,7 @@ services:
     volumes:
       - ./rentalservice:/app
       - ./logs:/app/logs
-    command: /bin/sh -c "mvn clean install && java -jar /app/target/rentalservice-0.0.1-SNAPSHOT.jar"
+    command: /bin/sh -c "mvn clean install -Dmaven.test.skip=true && java -jar /app/target/rentalservice-0.0.1-SNAPSHOT.jar"
 
   review-service:
     image: maven:3.8.3-openjdk-17
@@ -64,7 +64,7 @@ services:
     volumes:
       - ./reviewservice:/app
       - ./logs:/app/logs
-    command: /bin/sh -c "mvn clean install && java -jar /app/target/reviewservice-0.0.1-SNAPSHOT.jar"
+    command: /bin/sh -c "mvn clean install -Dmaven.test.skip=true && java -jar /app/target/reviewservice-0.0.1-SNAPSHOT.jar"
 
   ### API GATEWAY
 

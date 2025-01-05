@@ -1,11 +1,11 @@
 package pl.aeh.microservices.gameservice.app.game;
 
-import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.aeh.microservices.gameservice.messaging.KafkaProducerService;
+
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -13,18 +13,31 @@ import pl.aeh.microservices.gameservice.messaging.KafkaProducerService;
 public class GameService {
 
     private final GameRepository gameRepository;
-    private final GameService gameService;
     private final KafkaProducerService kafkaProducerService;
 
     public GameDto getGame(UUID gameId) {
-        return gameService.getGame(gameId);
+        GameEntity game = gameRepository.getReferenceById(gameId);
+        return new GameDto(
+                game.getId(),
+                game.getTitle(),
+                game.getDescription(),
+//                game.getGameType(),
+//                game.getGameGenre(),
+                game.getPlayers_from(),
+                game.getPlayers_to(),
+                game.getAge_from(),
+                game.getAge_to(),
+                game.isAvailable(),
+                game.getTotalReviews(),
+                game.getAverageRate()
+        );
     }
 
     public void addGame(GameDto game) {
-        log.info("Adding game {}", game.id());
         GameEntity entity = new GameEntity(game);
+        log.info("Adding game {}", game.id());
         gameRepository.save(entity);
-        kafkaProducerService.gameCreated(game);
+        kafkaProducerService.gameCreated(entity.toDto());
     }
 
     public void editGame(GameDto game) {
@@ -51,25 +64,27 @@ public class GameService {
         }
     }
 
-    public void checkAvailability(UUID gameId) {
+    public boolean checkAvailability(UUID gameId) {
         log.info("Checking availability of game {}", gameId);
         try {
             GameEntity entity = getGameEntity(gameId);
             if (entity.isAvailable()) {
                 log.info("Game with id {} is available", gameId);
+                return true;
             }
         } catch (Exception e) {
             log.warn("Game with id {} does on exist ", gameId);
         }
+        return false;
     }
 
-    public void editGameAvailability(GameDto game, boolean isGameAvailable) {
-        log.info("Changing game availability {}", game.id());
+    public void editGameAvailability(UUID gameId, int quantity) {
+        log.info("Changing game availability {}", gameId);
         try {
-            GameEntity entity = getGameEntity(game.id());
-            entity.changeAvailable(isGameAvailable);
+            GameEntity entity = getGameEntity(gameId);
+            entity.changeAvailable(quantity > 0);
         } catch (Exception e) {
-            log.warn("Can't update game availability with id {}, game does not exist", game.id());
+            log.warn("Can't update game availability with id {}, game does not exist", gameId);
         }
     }
 

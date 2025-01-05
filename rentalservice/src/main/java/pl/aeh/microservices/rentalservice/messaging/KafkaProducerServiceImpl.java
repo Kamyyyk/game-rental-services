@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import pl.aeh.microservices.inventoryservice.app.game.GameDto;
 
 import java.util.UUID;
 
@@ -17,12 +16,12 @@ class KafkaProducerServiceImpl implements KafkaProducerService {
 
     @Override
     public void gameOrdered(UUID gameId) {
-        sendMessage("game-ordered", gameId );
+        sendMessage("game-ordered", gameId);
     }
 
     @Override
     public void gameReturned(UUID gameId) {
-        sendMessage("game-returned", gameId );
+        sendMessage("game-returned", gameId);
     }
 
     private void sendMessage(String topic, Object message) {

@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: game-service
+  profiles:
+    active: logging, metrics, microservice
+  config:
+    import: configserver:http://configuration-server:8888

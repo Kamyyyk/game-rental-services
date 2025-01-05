@@ -18,7 +18,7 @@ public class GameController {
     private final GameService gameService;
 
     @GetMapping("/get")
-    public void getGame(@RequestParam UUID gameId) {gameService.getGame(gameId);}
+    public GameDto getGame(@RequestParam UUID gameId) {return gameService.getGame(gameId);}
 
     @PostMapping("/add")
     public void addGame(@RequestBody GameDto gameDto) {
@@ -31,8 +31,8 @@ public class GameController {
     }
 
     @GetMapping("/check-availability")
-    public void checkAvailability(@RequestParam UUID gameId) {
-        gameService.checkAvailability(gameId);
+    public boolean checkAvailability(@RequestParam UUID gameId) {
+        return gameService.checkAvailability(gameId);
     }
 
     @DeleteMapping("/remove")
