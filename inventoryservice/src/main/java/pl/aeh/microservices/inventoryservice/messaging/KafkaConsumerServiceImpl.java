@@ -15,7 +15,7 @@ class KafkaConsumerServiceImpl implements KafkaConsumerService {
     private final GameService gameService;
 
     @Override
-    public void listenGameCreatedMessage(GameDto message) {
+    public void listenGameCreatedMessage(GameCreatedMessage message) {
         gameService.addGame(message);
     }
 

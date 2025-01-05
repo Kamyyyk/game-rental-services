@@ -4,12 +4,12 @@ import pl.aeh.microservices.inventoryservice.app.game.GameDto;
 
 import java.util.UUID;
 
-record GameDeliveredMessage(
+record GameStockChangedMessage(
         UUID id,
         UUID gameId,
         Integer quantity
 ) {
-    public GameDeliveredMessage(GameDto game, Integer quantity) {
+    public GameStockChangedMessage(GameDto game, Integer quantity) {
         this(UUID.randomUUID(), game.id(), quantity);
     }
 }
