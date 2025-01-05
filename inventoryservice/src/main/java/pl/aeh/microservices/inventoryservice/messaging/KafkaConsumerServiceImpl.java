@@ -1,5 +1,6 @@
 package pl.aeh.microservices.inventoryservice.messaging;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,12 @@ import java.util.UUID;
 class KafkaConsumerServiceImpl implements KafkaConsumerService {
 
     private final GameService gameService;
+    private final ObjectMapper objectMapper;
 
     @Override
-    public void listenGameCreatedMessage(GameCreatedMessage message) {
-        gameService.addGame(message);
+    public void listenGameCreatedMessage(String message) {
+        GameCreatedMessage gameCreatedMessage = objectMapper.convertValue(message, GameCreatedMessage.class);
+        gameService.addGame(gameCreatedMessage);
     }
 
     @Override
