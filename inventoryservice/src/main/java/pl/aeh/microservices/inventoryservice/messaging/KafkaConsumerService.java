@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface KafkaConsumerService {
     @KafkaListener(topics = "game-created", groupId = "game-inventory-group")
-    void listenGameCreatedMessage(GameCreatedMessage message);
+    void listenGameCreatedMessage(String message);
 
     @KafkaListener(topics = "game-updated", groupId = "game-inventory-group")
     void listenGameUpdatedMessage(GameDto message);
