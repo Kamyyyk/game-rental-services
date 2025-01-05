@@ -42,6 +42,18 @@ class GameServiceImpl implements GameService {
         }
     }
 
+    @Override
+    public void removeGame(GameRemovedMessage game) {
+        log.info("Usuwanie gry {}...", game.id());
+        try {
+            GameEntity entity = getGameEntity(game.gameId());
+            gameRepository.delete(entity);
+            log.info("Gra {} usunięto", game.gameId());
+        } catch (EntityNotFoundException e) {
+            log.info("Brak gry {}", game.gameId());
+        }
+    }
+
     private GameEntity getGameEntity(UUID gameId) {
         return gameRepository.findById(gameId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Gra o id %s nie istnieje", gameId)));
