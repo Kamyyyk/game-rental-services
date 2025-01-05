@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pl.aeh.microservices.reviewservice.messaging.GameUpdatedMessage;
 
 import java.util.UUID;
 
@@ -34,16 +35,15 @@ class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void renameGame(GameDto message) {
+    public void renameGame(GameUpdatedMessage message) {
         log.info("Aktualizacja gry {}...", message.id());
         try {
             GameEntity entity = getGameEntity(message.id());
-            entity.changeName(message.name());
+            entity.changeName(message.gameName());
             gameRepository.save(entity);
             log.info("Gra {} zaktualizowana", message.id());
         } catch (EntityNotFoundException e) {
             log.info("Brak gry {}", message.id());
-            addGame(message);
         }
     }
 

@@ -3,6 +3,8 @@ package pl.aeh.microservices.reviewservice.app.review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pl.aeh.microservices.reviewservice.messaging.GameCreatedMessage;
+import pl.aeh.microservices.reviewservice.messaging.GameRemovedMessage;
+import pl.aeh.microservices.reviewservice.messaging.GameUpdatedMessage;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,4 +30,8 @@ public interface ReviewService {
     List<ReviewDto> findAll();
 
     void addGame(GameCreatedMessage gameCreatedMessage);
+
+    void removeGame(GameRemovedMessage gameRemovedMessage);
+
+    void renameGame(GameUpdatedMessage gameUpdatedMessage);
 }
