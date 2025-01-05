@@ -6,10 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import pl.aeh.microservices.reviewservice.app.review.ReviewDto;
-import pl.aeh.microservices.reviewservice.app.review.ReviewService;
-
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -17,20 +13,10 @@ import java.util.UUID;
 class KafkaProducerServiceImpl implements KafkaProducerService {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
-
-    private final ReviewService reviewService;
     private final ObjectMapper objectMapper;
 
     @Override
-    public void reviewChanged(ReviewDto reviewDto) {
-        Integer totalReviews = reviewService.getReviewsByGameId(reviewDto.gameId()).size();
-        Double averageRate = reviewService.getAverageRating(reviewDto.gameId());
-        ReviewChangedMessage message = new ReviewChangedMessage(
-                UUID.randomUUID(),
-                reviewDto.gameId(),
-                totalReviews,
-                averageRate
-        );
+    public void reviewChanged(ReviewChangedMessage message) {
         sendMessage("review-changed", message);
     }
 

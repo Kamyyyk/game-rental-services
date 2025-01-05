@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.aeh.microservices.inventoryservice.app.game.GameDto;
 import pl.aeh.microservices.inventoryservice.app.game.GameService;
-
-import java.util.UUID;
+import pl.aeh.microservices.inventoryservice.app.stock.GameStockService;
 
 @Slf4j
 @Service
@@ -15,6 +13,7 @@ import java.util.UUID;
 class KafkaConsumerServiceImpl implements KafkaConsumerService {
 
     private final GameService gameService;
+    private final GameStockService gameStockService;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -23,13 +22,23 @@ class KafkaConsumerServiceImpl implements KafkaConsumerService {
     }
 
     @Override
-    public void listenGameUpdatedMessage(GameDto message) {
-        gameService.updateGame(message);
+    public void listenGameUpdatedMessage(String message) {
+        gameService.updateGame(readValue(message, GameUpdatedMessage.class));
     }
 
     @Override
-    public void listenGameRemovedMessage(UUID message) {
-        gameService.removeGame(message);
+    public void listenGameRemovedMessage(String message) {
+        gameService.removeGame(readValue(message, GameRemovedMessage.class));
+    }
+
+    @Override
+    public void listenGameOrderedMessage(String message) {
+        gameStockService.orderGame(readValue(message, GameOrderedMessage.class));
+    }
+
+    @Override
+    public void listenGameReturnedMessage(String message) {
+        gameStockService.returnGame(readValue(message, GameReturnedMessage.class));
     }
 
     public <T> T readValue(String message, Class<T> clazz) {

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.aeh.microservices.inventoryservice.app.game.GameDto;
 import pl.aeh.microservices.inventoryservice.app.game.GameService;
+import pl.aeh.microservices.inventoryservice.messaging.GameOrderedMessage;
+import pl.aeh.microservices.inventoryservice.messaging.GameReturnedMessage;
 import pl.aeh.microservices.inventoryservice.messaging.KafkaProducerService;
 
 import java.util.UUID;
@@ -56,7 +58,6 @@ class GameStockServiceImpl implements GameStockService {
     }
 
     @Override
-    @Transactional
     public void registerGameLoss(UUID gameId, Integer quantity) {
         log.info("Rozpoczęto rejestrację straty gry o id {} w ilości {} szt.", gameId, quantity);
 
@@ -68,6 +69,16 @@ class GameStockServiceImpl implements GameStockService {
 
         log.info("Rejestracja straty gry {} w ilości {} szt. zakończona poprawnie", game.name(), quantity);
         kafkaProducerService.stockChanged(game, quantity);
+    }
+
+    @Override
+    public void orderGame(GameOrderedMessage order) {
+       registerGameLoss(order.gameId(), 1);
+    }
+
+    @Override
+    public void returnGame(GameReturnedMessage game) {
+        receiveGameDelivery(game.gameId(), 1);
     }
 
     private GameStock getGameStockEntity(UUID gameId) {

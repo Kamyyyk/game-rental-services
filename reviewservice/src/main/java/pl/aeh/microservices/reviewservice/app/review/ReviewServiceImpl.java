@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.aeh.microservices.reviewservice.app.game.GameDto;
 import pl.aeh.microservices.reviewservice.app.game.GameService;
-import pl.aeh.microservices.reviewservice.messaging.GameCreatedMessage;
-import pl.aeh.microservices.reviewservice.messaging.GameRemovedMessage;
-import pl.aeh.microservices.reviewservice.messaging.GameUpdatedMessage;
-import pl.aeh.microservices.reviewservice.messaging.KafkaProducerService;
+import pl.aeh.microservices.reviewservice.messaging.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -87,7 +84,7 @@ class ReviewServiceImpl implements ReviewService {
     public void addReview(ReviewDto review) {
         ReviewEntity entity = new ReviewEntity(review.id(), review.gameId(), review.gameName(), review.content(), review.rating());
         reviewRepository.save(entity);
-        kafkaProducerService.reviewChanged(review);
+        kafkaProducerService.reviewChanged(buildChangeMessage(review));
         log.info("Dodano recenzję do gry o id: {}.", review.gameId());
     }
 
@@ -98,7 +95,7 @@ class ReviewServiceImpl implements ReviewService {
         entity.setContent(review.content());
         entity.setRating(review.rating());
         reviewRepository.save(entity);
-        kafkaProducerService.reviewChanged(review);
+        kafkaProducerService.reviewChanged(buildChangeMessage(review));
         log.info("Recenzja o id {} została zmodyfikowana.", review.id());
     }
 
@@ -106,9 +103,18 @@ class ReviewServiceImpl implements ReviewService {
     public void deleteReview(UUID reviewId) {
         reviewRepository.deleteById(reviewId);
         log.info("Recenzja o id {} została usunięta.", reviewId);
-        kafkaProducerService.reviewChanged(reviewRepository.findById(reviewId)
-                .map(ReviewEntity::toDto)
-                .orElseThrow(EntityNotFoundException::new)
+        kafkaProducerService.reviewChanged(buildChangeMessage(getReviewById(reviewId))
+        );
+    }
+
+    private ReviewChangedMessage buildChangeMessage(ReviewDto reviewDto) {
+        Integer totalReviews = getReviewsByGameId(reviewDto.gameId()).size();
+        Double averageRate = getAverageRating(reviewDto.gameId());
+        return new ReviewChangedMessage(
+                UUID.randomUUID(),
+                reviewDto.gameId(),
+                totalReviews,
+                averageRate
         );
     }
 }
