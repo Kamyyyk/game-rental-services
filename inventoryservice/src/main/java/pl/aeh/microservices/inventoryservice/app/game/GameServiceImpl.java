@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pl.aeh.microservices.inventoryservice.messaging.GameCreatedMessage;
 
 import java.util.UUID;
 
@@ -22,9 +23,9 @@ class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void addGame(GameDto game) {
+    public void addGame(GameCreatedMessage game) {
         log.info("Dodawanie gry {}...", game.id());
-        GameEntity entity = new GameEntity(game.id(), game.name());
+        GameEntity entity = new GameEntity(game.id(), game.gameName());
         gameRepository.save(entity);
     }
 
@@ -38,7 +39,6 @@ class GameServiceImpl implements GameService {
             log.info("Gra {} zaktualizowana", message.id());
         } catch (EntityNotFoundException e) {
             log.info("Brak gry {}", message.id());
-            addGame(message);
         }
     }
 
