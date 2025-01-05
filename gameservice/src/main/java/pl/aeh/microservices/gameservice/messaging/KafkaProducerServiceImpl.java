@@ -25,12 +25,12 @@ class KafkaProducerServiceImpl implements KafkaProducerService {
 
     @Override
     public void gameUpdated(GameDto game) {
-        sendMessage("game-updated", new GameUpdatedMessage(game));
+        sendMessage("game-updated", new GameUpdatedMessage(UUID.randomUUID(), game.id(), game.title()));
     }
 
     @Override
     public void gameRemoved(UUID gameId) {
-        sendMessage("game-removed", new GameRemovedMessage(gameId));
+        sendMessage("game-removed", new GameRemovedMessage(UUID.randomUUID(), gameId));
     }
 
     private void sendMessage(String topic, Object message) {

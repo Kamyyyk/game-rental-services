@@ -1,8 +1,8 @@
-package pl.aeh.microservices.gameservice.messaging;
+package pl.aeh.microservices.rentalservice.messaging;
 
 import java.util.UUID;
 
-public record GameStockChangedMessage(
+record GameStockChangedMessage(
         UUID id,
         UUID gameId,
         Integer quantity

@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.aeh.microservices.reviewservice.app.game.GameDto;
+import pl.aeh.microservices.reviewservice.app.game.GameService;
+import pl.aeh.microservices.reviewservice.messaging.GameCreatedMessage;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +20,7 @@ import java.util.UUID;
 class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final GameService gameService;
 
     @Override
     public List<ReviewDto> getReviewsByGameId(UUID gameId) {
@@ -34,8 +38,18 @@ class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewDto> findAllByParameters(ReviewSearchParameters parameters, Pageable pageable) {
-        return null;
+    public List<ReviewDto> findAll() {
+        return reviewRepository.findAll().stream()
+                .map(ReviewEntity::toDto)
+                .toList();
+    }
+
+    @Override
+    public void addGame(GameCreatedMessage gameCreatedMessage) {
+        gameService.addGame(new GameDto(
+                gameCreatedMessage.gameId(),
+                gameCreatedMessage.gameName()
+        ));
     }
 
     @Override

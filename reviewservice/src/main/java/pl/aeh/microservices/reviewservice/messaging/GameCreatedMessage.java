@@ -1,8 +1,8 @@
-package pl.aeh.microservices.gameservice.messaging;
+package pl.aeh.microservices.reviewservice.messaging;
 
 import java.util.UUID;
 
-public record GameUpdatedMessage(
+public record GameCreatedMessage(
         UUID id,
         UUID gameId,
         String gameName
