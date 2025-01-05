@@ -1,4 +1,4 @@
-package pl.aeh.microservices.rentalservice.app.RentalOrder;
+package pl.aeh.microservices.rentalservice.app.rentalOrder;
 
 import java.util.UUID;
 

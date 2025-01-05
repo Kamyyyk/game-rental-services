@@ -1,5 +1,7 @@
 package pl.aeh.microservices.reviewservice.app.game;
 
+import pl.aeh.microservices.reviewservice.messaging.GameUpdatedMessage;
+
 import java.util.UUID;
 
 public interface GameService {
@@ -7,5 +9,5 @@ public interface GameService {
 
     void removeGame(UUID gameId);
 
-    void renameGame(GameDto message);
+    void renameGame(GameUpdatedMessage message);
 }
