@@ -1,10 +1,10 @@
-package pl.aeh.microservices.rentalservice.app.RentalOrder;
+package pl.aeh.microservices.rentalservice.app.rentalOrder;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.aeh.microservices.rentalservice.app.Game.GameDto;
-import pl.aeh.microservices.rentalservice.app.Game.GameService;
+import pl.aeh.microservices.rentalservice.app.game.GameDto;
+import pl.aeh.microservices.rentalservice.app.game.GameService;
 import pl.aeh.microservices.rentalservice.messaging.KafkaConsumerService;
 import pl.aeh.microservices.rentalservice.messaging.KafkaProducerService;
 

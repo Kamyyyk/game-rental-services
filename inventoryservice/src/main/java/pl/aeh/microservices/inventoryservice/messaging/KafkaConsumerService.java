@@ -1,5 +1,6 @@
 package pl.aeh.microservices.inventoryservice.messaging;
 
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.kafka.annotation.KafkaListener;
 import pl.aeh.microservices.inventoryservice.app.game.GameDto;
 
@@ -10,8 +11,14 @@ public interface KafkaConsumerService {
     void listenGameCreatedMessage(String message);
 
     @KafkaListener(topics = "game-updated", groupId = "game-inventory-group")
-    void listenGameUpdatedMessage(GameDto message);
+    void listenGameUpdatedMessage(String message);
 
     @KafkaListener(topics = "game-removed", groupId = "game-inventory-group")
-    void listenGameRemovedMessage(UUID message);
+    void listenGameRemovedMessage(String message);
+
+    @KafkaListener(topics = "game-ordered", groupId = "game-inventory-group")
+    void listenGameOrderedMessage(String message);
+
+    @KafkaListener(topics = "game-returned", groupId = "game-inventory-group")
+    void listenGameReturnedMessage(String message);
 }

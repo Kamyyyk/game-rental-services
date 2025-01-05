@@ -3,9 +3,10 @@ package pl.aeh.microservices.reviewservice.app.review;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.aeh.microservices.reviewservice.app.game.GameDto;
+import pl.aeh.microservices.reviewservice.app.game.GameService;
+import pl.aeh.microservices.reviewservice.messaging.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,8 @@ import java.util.UUID;
 class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final KafkaProducerService kafkaProducerService;
+    private final GameService gameService;
 
     @Override
     public List<ReviewDto> getReviewsByGameId(UUID gameId) {
@@ -34,8 +37,28 @@ class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewDto> findAllByParameters(ReviewSearchParameters parameters, Pageable pageable) {
-        return null;
+    public List<ReviewDto> findAll() {
+        return reviewRepository.findAll().stream()
+                .map(ReviewEntity::toDto)
+                .toList();
+    }
+
+    @Override
+    public void addGame(GameCreatedMessage gameCreatedMessage) {
+        gameService.addGame(new GameDto(
+                gameCreatedMessage.gameId(),
+                gameCreatedMessage.gameName()
+        ));
+    }
+
+    @Override
+    public void removeGame(GameRemovedMessage gameRemovedMessage) {
+        gameService.removeGame(gameRemovedMessage.gameId());
+    }
+
+    @Override
+    public void renameGame(GameUpdatedMessage gameUpdatedMessage) {
+        gameService.renameGame(gameUpdatedMessage);
     }
 
     @Override
@@ -61,6 +84,7 @@ class ReviewServiceImpl implements ReviewService {
     public void addReview(ReviewDto review) {
         ReviewEntity entity = new ReviewEntity(review.id(), review.gameId(), review.gameName(), review.content(), review.rating());
         reviewRepository.save(entity);
+        kafkaProducerService.reviewChanged(buildChangeMessage(review));
         log.info("Dodano recenzję do gry o id: {}.", review.gameId());
     }
 
@@ -71,6 +95,7 @@ class ReviewServiceImpl implements ReviewService {
         entity.setContent(review.content());
         entity.setRating(review.rating());
         reviewRepository.save(entity);
+        kafkaProducerService.reviewChanged(buildChangeMessage(review));
         log.info("Recenzja o id {} została zmodyfikowana.", review.id());
     }
 
@@ -78,5 +103,18 @@ class ReviewServiceImpl implements ReviewService {
     public void deleteReview(UUID reviewId) {
         reviewRepository.deleteById(reviewId);
         log.info("Recenzja o id {} została usunięta.", reviewId);
+        kafkaProducerService.reviewChanged(buildChangeMessage(getReviewById(reviewId))
+        );
+    }
+
+    private ReviewChangedMessage buildChangeMessage(ReviewDto reviewDto) {
+        Integer totalReviews = getReviewsByGameId(reviewDto.gameId()).size();
+        Double averageRate = getAverageRating(reviewDto.gameId());
+        return new ReviewChangedMessage(
+                UUID.randomUUID(),
+                reviewDto.gameId(),
+                totalReviews,
+                averageRate
+        );
     }
 }

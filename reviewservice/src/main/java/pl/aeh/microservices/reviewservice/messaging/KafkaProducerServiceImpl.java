@@ -1,4 +1,4 @@
-package pl.aeh.microservices.gameservice.messaging;
+package pl.aeh.microservices.reviewservice.messaging;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,12 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import pl.aeh.microservices.gameservice.app.game.GameDto;
 
-import java.util.UUID;
-
-@Service
 @Slf4j
+@Service
 @RequiredArgsConstructor
 class KafkaProducerServiceImpl implements KafkaProducerService {
 
@@ -19,18 +16,8 @@ class KafkaProducerServiceImpl implements KafkaProducerService {
     private final ObjectMapper objectMapper;
 
     @Override
-    public void gameCreated(GameDto game) {
-        sendMessage("game-created", new GameCreatedMessage(UUID.randomUUID(), game.id(), game.title()));
-    }
-
-    @Override
-    public void gameUpdated(GameDto game) {
-        sendMessage("game-updated", new GameUpdatedMessage(UUID.randomUUID(), game.id(), game.title()));
-    }
-
-    @Override
-    public void gameRemoved(UUID gameId) {
-        sendMessage("game-removed", new GameRemovedMessage(UUID.randomUUID(), gameId));
+    public void reviewChanged(ReviewChangedMessage message) {
+        sendMessage("review-changed", message);
     }
 
     private void sendMessage(String topic, Object message) {

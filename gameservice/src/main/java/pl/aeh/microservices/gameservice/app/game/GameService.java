@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.aeh.microservices.gameservice.messaging.KafkaProducerService;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -21,34 +22,43 @@ public class GameService {
                 game.getId(),
                 game.getTitle(),
                 game.getDescription(),
-//                game.getGameType(),
-//                game.getGameGenre(),
-                game.getPlayers_from(),
-                game.getPlayers_to(),
-                game.getAge_from(),
-                game.getAge_to(),
+                game.getPlayersFrom(),
+                game.getPlayersTo(),
+                game.getAgeFrom(),
+                game.getAgeTo(),
                 game.isAvailable(),
-                game.getTotalReviews(),
-                game.getAverageRate()
+                game.getAverageRate(),
+                game.getTotalReviews()
         );
     }
 
-    public void addGame(GameDto game) {
+    public void addGame(InputGameDto game) {
         GameEntity entity = new GameEntity(game);
-        log.info("Adding game {}", game.id());
+        log.info("Adding game {}", entity.getId());
         gameRepository.save(entity);
         kafkaProducerService.gameCreated(entity.toDto());
     }
 
-    public void editGame(GameDto game) {
+    public void editGame(InputGameDto game) {
         log.info("Updating game {}", game.id());
         try {
             GameEntity entity = getGameEntity(game.id());
             entity.changeTitle(game.title());
             entity.changeDescription(game.description());
-            kafkaProducerService.gameUpdated(game);
+            kafkaProducerService.gameUpdated(entity.toDto());
         } catch (Exception e) {
             log.warn("Can't update game with id {}, game does not exist", game.id());
+        }
+    }
+
+    public void updateReviewsData(UUID gameId, Integer totalReviews, Double averageRate) {
+        log.info("Updating rating data for game {}", gameId);
+        try {
+            GameEntity entity = getGameEntity(gameId);
+            entity.updateReviewsData(totalReviews, averageRate);
+            gameRepository.save(entity);
+        } catch (Exception e) {
+            log.warn("Can't update rating data for game with id {}, game does not exist", gameId);
         }
     }
 
@@ -88,15 +98,11 @@ public class GameService {
         }
     }
 
-//    @Override
-//    public Page<GameDto> findGames(GameSearchParameters parameters, Pageable pageable) {
-//        Page<GameEntity> games = gameRepository.findAll(parameters, pageable);
-//        return games.map(e -> {
-//            Game game = new Game(e);
-//            GameDto gameDto = gameService.getGame(e.getId());
-//            return new GameDto(gameDto.id())
-//        });
-//    }
+    public List<GameDto> getAllGames() {
+        return gameRepository.findAll().stream()
+                .map(GameEntity::toDto)
+                .toList();
+    }
 
     private GameEntity getGameEntity(UUID gameId) {
         return gameRepository.findById(gameId).orElseThrow(null);

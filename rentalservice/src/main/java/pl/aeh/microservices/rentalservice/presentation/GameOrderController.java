@@ -3,9 +3,9 @@ package pl.aeh.microservices.rentalservice.presentation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import pl.aeh.microservices.rentalservice.app.RentalOrder.RentalOrderDto;
-import pl.aeh.microservices.rentalservice.app.RentalOrder.RentalOrderSearchParameters;
-import pl.aeh.microservices.rentalservice.app.RentalOrder.RentalOrderService;
+import pl.aeh.microservices.rentalservice.app.rentalOrder.RentalOrderDto;
+import pl.aeh.microservices.rentalservice.app.rentalOrder.RentalOrderSearchParameters;
+import pl.aeh.microservices.rentalservice.app.rentalOrder.RentalOrderService;
 
 import java.util.UUID;
 

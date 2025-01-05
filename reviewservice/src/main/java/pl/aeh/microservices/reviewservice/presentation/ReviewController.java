@@ -1,13 +1,11 @@
 package pl.aeh.microservices.reviewservice.presentation;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import pl.aeh.microservices.reviewservice.app.review.ReviewDto;
-import pl.aeh.microservices.reviewservice.app.review.ReviewSearchParameters;
 import pl.aeh.microservices.reviewservice.app.review.ReviewService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,12 +16,12 @@ class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/review-list")
-    Page<ReviewDto> findAllByParameters(ReviewSearchParameters parameters, Pageable pageable) {
-        return reviewService.findAllByParameters(parameters, pageable);
+    List<ReviewDto> findAllByParameters() {
+        return reviewService.findAll();
     }
 
-    @GetMapping("/review-one")
-    ReviewDto getReview(UUID reviewId) {
+    @GetMapping("/{reviewId}")
+    ReviewDto getReview(@PathVariable UUID reviewId) {
         return reviewService.getReviewById(reviewId);
     }
 

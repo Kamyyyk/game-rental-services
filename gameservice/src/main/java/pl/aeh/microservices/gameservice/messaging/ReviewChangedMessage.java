@@ -2,9 +2,10 @@ package pl.aeh.microservices.gameservice.messaging;
 
 import java.util.UUID;
 
-public record GameUpdatedMessage(
+public record ReviewChangedMessage(
         UUID id,
         UUID gameId,
-        String gameName
+        Integer totalReviews,
+        Double averageRating
 ) {
 }

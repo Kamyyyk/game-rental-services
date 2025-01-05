@@ -6,4 +6,7 @@ import pl.aeh.microservices.gameservice.app.game.GameDto;
 public interface KafkaConsumerService {
     @KafkaListener(topics = "game-stock-changed", groupId = "game-group")
     void listenStockUpdated(GameStockChangedMessage message);
+
+    @KafkaListener(topics = "review-changed", groupId = "game-group")
+    void listenStockUpdated(ReviewChangedMessage message);
 }
