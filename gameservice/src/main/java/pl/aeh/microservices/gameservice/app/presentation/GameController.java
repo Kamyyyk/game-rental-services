@@ -1,14 +1,12 @@
 package pl.aeh.microservices.gameservice.app.presentation;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import pl.aeh.microservices.gameservice.app.game.InputGameDto;
 import pl.aeh.microservices.gameservice.app.game.GameDto;
-import pl.aeh.microservices.gameservice.app.game.GameSearchParameters;
 import pl.aeh.microservices.gameservice.app.game.GameService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -21,13 +19,13 @@ public class GameController {
     public GameDto getGame(@RequestParam UUID gameId) {return gameService.getGame(gameId);}
 
     @PostMapping("/add")
-    public void addGame(@RequestBody GameDto gameDto) {
-        gameService.addGame(gameDto);
+    public void addGame(@RequestBody InputGameDto inputGameDto) {
+        gameService.addGame(inputGameDto);
     }
 
     @PutMapping("/edit")
-    public void editGame(@RequestBody GameDto gameDto) {
-        gameService.editGame(gameDto);
+    public void editGame(@RequestBody InputGameDto inputGameDto) {
+        gameService.editGame(inputGameDto);
     }
 
     @GetMapping("/check-availability")
@@ -35,13 +33,14 @@ public class GameController {
         return gameService.checkAvailability(gameId);
     }
 
+    @GetMapping("/list")
+    public List<GameDto> getAllGames() {
+        return gameService.getAllGames();
+    }
+
     @DeleteMapping("/remove")
     public void removeGame(@RequestParam UUID gameId) {
         gameService.removeGame(gameId);
     }
 
-//    @GetMapping("find")
-//    Page<GameDto> findGames(GameSearchParameters gameSearchParameters, Pageable pageable) {
-//        return gameService.findGames(gameSearchParameters, pageable);
-//    }
 }

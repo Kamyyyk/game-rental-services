@@ -2,11 +2,8 @@ package pl.aeh.microservices.rentalservice.messaging;
 
 import java.util.UUID;
 
-public record GameDeliveredMessage(
+public record GameReturnedMessage(
         UUID id,
-        UUID gameId,
-        Integer quantity
+        UUID gameId
 ) {
-
-
 }

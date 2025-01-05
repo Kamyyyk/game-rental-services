@@ -15,4 +15,9 @@ class KafkaConsumerServiceImpl implements KafkaConsumerService {
     public void listenStockUpdated(GameStockChangedMessage message) {
         gameService.editGameAvailability(message.gameId(), message.quantity());
     }
+
+    @Override
+    public void listenStockUpdated(ReviewChangedMessage message) {
+        gameService.updateReviewsData(message.gameId(), message.totalReviews(), message.averageRating());
+    }
 }
