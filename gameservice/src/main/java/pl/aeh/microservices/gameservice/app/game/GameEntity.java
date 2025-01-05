@@ -12,18 +12,18 @@ import java.util.UUID;
 @Table(name = "game")
 public class GameEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @Column(name = "title")
     private String title;
     @Column(name = "description")
     private String description;
-    @ManyToOne
-    @JoinColumn(name = "game_type_id")
-    private GameTypeEntity gameType;
-    @ManyToOne
-    @JoinColumn(name = "game_genre_id")
-    private GameGenreEntity gameGenre;
+//    @ManyToOne
+//    @JoinColumn(name = "game_type_id")
+//    private GameTypeEntity gameType;
+//    @ManyToOne
+//    @JoinColumn(name = "game_genre_id")
+//    private GameGenreEntity gameGenre;
     @Column(name = "players_from")
     private int players_from;
     @Column(name = "players_to")
@@ -42,11 +42,13 @@ public class GameEntity {
     public GameEntity() {}
 
     public GameEntity(GameDto game) {
-        this.id = game.id();
+        if (game.id() == null) {
+            this.id = UUID.randomUUID();
+        }
         this.title = game.title();
         this.description = game.description();
-        this.gameType = game.type_id();
-        this.gameGenre = game.genre_id();
+//        this.gameType = game.type_id();
+//        this.gameGenre = game.genre_id();
         this.players_from = game.players_from();
         this.players_to = game.players_to();
         this.age_from = game.age_from();
@@ -63,13 +65,13 @@ public class GameEntity {
         this.description = description;
     }
 
-    public void changeGameType(GameTypeEntity gameType) {
-        this.gameType = gameType;
-    }
+//    public void changeGameType(GameTypeEntity gameType) {
+//        this.gameType = gameType;
+//    }
 
-    public void changeGameGenre(GameGenreEntity gameGenre) {
-        this.gameGenre = gameGenre;
-    }
+//    public void changeGameGenre(GameGenreEntity gameGenre) {
+//        this.gameGenre = gameGenre;
+//    }
 
     public void changePlayersFrom(int players_from) {
         this.players_from = players_from;
