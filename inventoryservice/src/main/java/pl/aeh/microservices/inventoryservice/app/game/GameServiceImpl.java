@@ -25,7 +25,7 @@ class GameServiceImpl implements GameService {
     @Override
     public void addGame(GameCreatedMessage game) {
         log.info("Dodawanie gry {}...", game.id());
-        GameEntity entity = new GameEntity(game.id(), game.gameName());
+        GameEntity entity = new GameEntity(game.gameId(), game.gameName());
         gameRepository.save(entity);
     }
 
