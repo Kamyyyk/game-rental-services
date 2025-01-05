@@ -78,13 +78,13 @@ public class GameService {
         return false;
     }
 
-    public void editGameAvailability(GameDto game, boolean isGameAvailable) {
-        log.info("Changing game availability {}", game.id());
+    public void editGameAvailability(UUID gameId, int quantity) {
+        log.info("Changing game availability {}", gameId);
         try {
-            GameEntity entity = getGameEntity(game.id());
-            entity.changeAvailable(isGameAvailable);
+            GameEntity entity = getGameEntity(gameId);
+            entity.changeAvailable(quantity > 0);
         } catch (Exception e) {
-            log.warn("Can't update game availability with id {}, game does not exist", game.id());
+            log.warn("Can't update game availability with id {}, game does not exist", gameId);
         }
     }
 

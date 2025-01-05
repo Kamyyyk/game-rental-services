@@ -12,7 +12,7 @@ class KafkaConsumerServiceImpl implements KafkaConsumerService {
     private final GameService gameService;
 
     @Override
-    public void listenStockUpdated(GameDto game, Integer quantity) {
-        gameService.editGameAvailability(game, quantity > 0);
+    public void listenStockUpdated(GameStockChangedMessage message) {
+        gameService.editGameAvailability(message.gameId(), message.quantity());
     }
 }
