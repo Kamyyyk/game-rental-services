@@ -35,7 +35,7 @@ public class GameService {
 
     public void addGame(GameDto game) {
         GameEntity entity = new GameEntity(game);
-        log.info("Adding game {}", game.id());
+        log.info("Adding game {}", entity.getId());
         gameRepository.save(entity);
         kafkaProducerService.gameCreated(entity.toDto());
     }
